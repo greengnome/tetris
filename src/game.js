@@ -27,10 +27,31 @@ export default class Game {
     activePiece = {
         x: 0,
         y: 0,
-        block: [
-            [0, 1, 0],
-            [1, 1, 1],
-            [0, 0, 0]
+        get blocks() {
+            return this.rotations[this.rotationIndex];
+        },
+        rotationIndex: 0,
+        rotations: [
+            [
+                [0, 1, 0],
+                [1, 1, 1],
+                [0, 0, 0]
+            ],
+            [
+                [0, 1, 0],
+                [0, 1, 1],
+                [0, 1, 0]
+            ],
+            [
+                [0, 0, 0],
+                [1, 1, 1],
+                [0, 1, 0]
+            ],
+            [
+                [0, 1, 0],
+                [1, 1, 0],
+                [0, 1, 0]
+            ],
         ]
     };
 
@@ -59,13 +80,24 @@ export default class Game {
         }
     }
 
-    hasCollision() {
-        const { x: activeX, y: activeY, block } = this.activePiece;
+    rotatePiece() {
+        // this.activePiece.rotationIndex = (this.activePiece.rotationIndex + 1) % 4;
+        this.activePiece.rotationIndex = this.activePiece.rotationIndex < 3 ? this.activePiece.rotationIndex + 1 : 0; 
 
-        for (let y = 0; y < block.length; y++) {
-            for (let x = 0; x < block[y].length; x++) {
+        if(this.hasCollision()) {
+          this.activePiece.rotationIndex = this.activePiece.rotationIndex > 0 ? this.activePiece.rotationIndex - 1 : 3; 
+        }       
+
+        return this.activePiece.blocks;
+    }
+
+    hasCollision() {
+        const { x: activeX, y: activeY, blocks } = this.activePiece;
+
+        for (let y = 0; y < blocks.length; y++) {
+            for (let x = 0; x < blocks[y].length; x++) {
                 if(
-                    block[y][x] && 
+                    blocks[y][x] && 
                     ((this.playfield[activeY + y] === undefined || this.playfield[activeY + y][activeX + x] === undefined) ||
                     this.playfield[activeY + y][activeX + x])
                     ) {
@@ -78,12 +110,12 @@ export default class Game {
     }
 
     lockPiece() {
-        const { x: activeX, y: activeY, block } = this.activePiece;
+        const { x: activeX, y: activeY, blocks } = this.activePiece;
 
-        for (let y = 0; y < block.length; y++) {
-            for (let x = 0; x < block[y].length; x++) {
-                if(block[y][x]) {
-                    this.playfield[activeY + y][activeX + x] = block[y][x];
+        for (let y = 0; y < blocks.length; y++) {
+            for (let x = 0; x < blocks[y].length; x++) {
+                if(blocks[y][x]) {
+                    this.playfield[activeY + y][activeX + x] = blocks[y][x];
                 }
             }            
         }
