@@ -31,4 +31,4 @@ document.addEventListener('keydown', e => {
     }
 })
 
-view.render(game.getState());
+view.renderMainScreen(game.getState());
