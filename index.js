@@ -13,19 +13,19 @@ document.addEventListener('keydown', e => {
     switch (e.keyCode) {
         case 37: // LEFT
             game.moveLeft();
-            view.render(game.getState());
+            view.renderMainScreen(game.getState());
             break;
         case 38: // UP
             game.rotatePiece();
-            view.render(game.getState());
+            view.renderMainScreen(game.getState());
             break;
         case 39: // RIGHT
             game.moveRight();
-            view.render(game.getState());
+            view.renderMainScreen(game.getState());
             break;
         case 40: // DOWN
             game.moveDown();
-            view.render(game.getState());        
+            view.renderMainScreen(game.getState());        
         default:
             break;
     }
